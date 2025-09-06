@@ -210,7 +210,7 @@ def main():
     
     report_chargers = set(charger_id for charger_id, _, _, _ in reports)
     
-    # It's okay if some chargers have no reports (they count as 100% downtime)
+    # It's ok if some chargers have no reports (they count as 100% downtime)
     # But all chargers in reports should belong to some station
     for charger_id in report_chargers:
         if charger_id not in all_station_chargers:
