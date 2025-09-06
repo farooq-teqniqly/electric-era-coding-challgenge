@@ -55,9 +55,18 @@ def parse_input_file(filepath: str) -> Tuple[Dict[int, List[int]], List[Tuple[in
             if len(parts) < 2:
                 print("ERROR")
                 sys.exit(1)
-            
+
             station_id = int(parts[0])
+            if station_id < 0:
+                print("ERROR")
+                sys.exit(1)
+
             charger_ids = [int(x) for x in parts[1:]]
+            for charger_id in charger_ids:
+                if charger_id < 0:
+                    print("ERROR")
+                    sys.exit(1)
+
             stations[station_id] = charger_ids
     except (ValueError, IndexError):
         print("ERROR")
@@ -71,16 +80,21 @@ def parse_input_file(filepath: str) -> Tuple[Dict[int, List[int]], List[Tuple[in
             if len(parts) != 4:
                 print("ERROR")
                 sys.exit(1)
-            
+
             charger_id = int(parts[0])
             start_time = int(parts[1])
             end_time = int(parts[2])
             is_up = parts[3].lower() == 'true'
-            
+
+            # Validate unsigned integer constraints
+            if charger_id < 0 or start_time < 0 or end_time < 0:
+                print("ERROR")
+                sys.exit(1)
+
             if start_time >= end_time:
                 print("ERROR")
                 sys.exit(1)
-            
+
             reports.append((charger_id, start_time, end_time, is_up))
     except (ValueError, IndexError):
         print("ERROR")

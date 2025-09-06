@@ -60,7 +60,75 @@ class TestChargerUptime(unittest.TestCase):
         """Test error handling for missing sections."""
         content = """[Stations]
 0 1001"""
-        
+
+        temp_file = self.create_temp_file(content)
+        try:
+            with self.assertRaises(SystemExit):
+                with redirect_stdout(StringIO()) as stdout:
+                    parse_input_file(temp_file)
+        finally:
+            os.unlink(temp_file)
+
+    def test_station_id_zero(self):
+        """Test that station ID zero is handled correctly."""
+        content = """[Stations]
+0 1001
+
+[Charger Availability Reports]
+1001 0 100 true"""
+
+        temp_file = self.create_temp_file(content)
+        try:
+            stations, reports = parse_input_file(temp_file)
+
+            expected_stations = {0: [1001]}
+            expected_reports = [(1001, 0, 100, True)]
+
+            self.assertEqual(stations, expected_stations)
+            self.assertEqual(reports, expected_reports)
+        finally:
+            os.unlink(temp_file)
+
+    def test_negative_station_id(self):
+        """Test that negative station IDs result in ERROR."""
+        content = """[Stations]
+-1 1001
+
+[Charger Availability Reports]
+1001 0 100 true"""
+
+        temp_file = self.create_temp_file(content)
+        try:
+            with self.assertRaises(SystemExit):
+                with redirect_stdout(StringIO()) as stdout:
+                    parse_input_file(temp_file)
+        finally:
+            os.unlink(temp_file)
+
+    def test_negative_charger_id(self):
+        """Test that negative charger IDs result in ERROR."""
+        content = """[Stations]
+0 -1001
+
+[Charger Availability Reports]
+-1001 0 100 true"""
+
+        temp_file = self.create_temp_file(content)
+        try:
+            with self.assertRaises(SystemExit):
+                with redirect_stdout(StringIO()) as stdout:
+                    parse_input_file(temp_file)
+        finally:
+            os.unlink(temp_file)
+
+    def test_negative_timestamps(self):
+        """Test that negative timestamps result in ERROR."""
+        content = """[Stations]
+0 1001
+
+[Charger Availability Reports]
+1001 -10 100 true"""
+
         temp_file = self.create_temp_file(content)
         try:
             with self.assertRaises(SystemExit):
