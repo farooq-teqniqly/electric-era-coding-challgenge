@@ -105,15 +105,15 @@ class TestChargerUptime(unittest.TestCase):
         ]
         
         # Station with chargers 1001, 1002
-        period = get_station_reporting_period(0, [1001, 1002], reports)
+        period = get_station_reporting_period([1001, 1002], reports)
         self.assertEqual(period, (0, 300))  # min=0, max=300
         
         # Station with charger 1003 only
-        period = get_station_reporting_period(1, [1003], reports)
+        period = get_station_reporting_period([1003], reports)
         self.assertEqual(period, (25, 75))
         
         # Station with no reports
-        period = get_station_reporting_period(2, [9999], reports)
+        period = get_station_reporting_period([9999], reports)
         self.assertEqual(period, (0, 0))
     
     def test_calculate_station_uptime_basic(self):

@@ -89,7 +89,7 @@ def parse_input_file(filepath: str) -> Tuple[Dict[int, List[int]], List[Tuple[in
     return stations, reports
 
 
-def get_station_reporting_period(station_id: int, charger_ids: List[int], 
+def get_station_reporting_period(charger_ids: List[int], 
                                reports: List[Tuple[int, int, int, bool]]) -> Tuple[int, int]:
     """
     Calculate the overall reporting period for a station based on all its chargers.
@@ -147,7 +147,7 @@ def calculate_station_uptime(station_id: int, charger_ids: List[int],
         Uptime percentage (0-100), rounded down to nearest integer
     """
     # Get the overall reporting period for this station
-    period_start, period_end = get_station_reporting_period(station_id, charger_ids, reports)
+    period_start, period_end = get_station_reporting_period(charger_ids, reports)
     
     if period_start == period_end:
         return 0
