@@ -44,11 +44,13 @@ This solution calculates station uptime for electric vehicle charging networks b
 ### Edge Cases Handled
 1. **Invalid Input Format**: Prints "ERROR" and exits gracefully
 2. **Missing Sections**: Validates presence of both [Stations] and [Charger Availability Reports]
-3. **No Reports for Charger**: Counts as 100% downtime for that charger
-4. **Gaps in Reports**: Time gaps between reports count as downtime
-5. **Overlapping Intervals**: Properly merges overlapping "up" periods
-6. **Rounding**: Always rounds down to nearest integer percentage
-7. **File Not Found**: Handles missing input files gracefully
+3. **Unsigned Integer Validation**: Rejects negative values for station IDs, charger IDs, and timestamps (as per problem constraints)
+4. **Station ID Zero**: Properly handles station ID 0 as valid unsigned integer
+5. **No Reports for Charger**: Counts as 100% downtime for that charger
+6. **Gaps in Reports**: Time gaps between reports count as downtime
+7. **Overlapping Intervals**: Properly merges overlapping "up" periods
+8. **Rounding**: Always rounds down to nearest integer percentage
+9. **File Not Found**: Handles missing input files gracefully
 
 ### Ambiguity Resolutions
 
@@ -108,11 +110,12 @@ python test_solution.py -v
 
 ### Test Coverage
 The test suite includes:
-- Input parsing validation
+- Input parsing validation (including unsigned integer constraints)
 - Interval merging logic
 - Station reporting period calculation
 - Uptime calculation with various scenarios
-- Error handling for invalid inputs
+- Error handling for invalid inputs (negative values, missing sections, etc.)
+- Edge case testing (station ID zero, negative values)
 - Main function integration tests
 
 ### Validation Against Provided Examples
@@ -125,6 +128,8 @@ The solution has been validated against both provided test cases:
 **Test Case 2 (input_2.txt)**:
 - Expected: `0 66`, `1 100`
 - Actual: `0 66`, `1 100`
+
+**Test Suite**: 16 comprehensive unit tests covering all functionality and edge cases
 
 ## Design Decisions
 
